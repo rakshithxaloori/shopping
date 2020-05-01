@@ -69,12 +69,13 @@ def load_data(filename):
             administrative = int(row[0])
             administrative_duration = float(row[1])
             informational = int(row[2])
-            product_related = int(row[3])
-            product_related_duration = float(row[4])
-            bounce_rates = float(row[5])
-            exit_rates = float(row[6])
-            page_values = float(row[7])
-            special_day = float(row[8])
+            informational_duration = float(row[3])
+            product_related = int(row[4])
+            product_related_duration = float(row[5])
+            bounce_rates = float(row[6])
+            exit_rates = float(row[7])
+            page_values = float(row[8])
+            special_day = float(row[9])
 
             switcher = {
                 "Jan": 0,
@@ -82,7 +83,7 @@ def load_data(filename):
                 "Mar": 2,
                 "Apr": 3,
                 "May": 4,
-                "Jun": 5,
+                "June": 5,
                 "Jul": 6,
                 "Aug": 7,
                 "Sep": 8,
@@ -91,26 +92,26 @@ def load_data(filename):
                 "Dec": 11,
             }
 
-            month = switcher.get(row[9], None)
+            month = switcher.get(row[10], None)
             if month is None:
                 raise ValueError
 
-            operating_systems = int(row[10])
-            browser = int(row[11])
-            region = int(row[12])
-            traffic_type = int(row[13])
+            operating_systems = int(row[11])
+            browser = int(row[12])
+            region = int(row[13])
+            traffic_type = int(row[14])
 
-            if row[14] == "New_Visitor":
+            if row[15] == "New_Visitor":
                 visitor_type = 0
             else:
                 visitor_type = 1
 
-            if row[15] == "FALSE":
+            if row[16] == "FALSE":
                 weekend = 0
             else:
                 weekend = 1
 
-            if row[16] == "FALSE":
+            if row[17] == "FALSE":
                 purchased = 0
             else:
                 purchased = 1
@@ -157,7 +158,7 @@ def evaluate(labels, predictions):
     positive_labels_count = 0
     negative_labels_count = 0
     for label, prediction in zip(labels, predictions):
-        if label = 0:
+        if label == 0:
             # true_positive_rate
             if label == prediction:
                 positive_labels_count += 1
@@ -170,7 +171,7 @@ def evaluate(labels, predictions):
 
     sensitivity = float(positive_labels_count)/float(total_labels_count)
     specificity = float(negative_labels_count)/float(total_labels_count)
-    
+
     return (sensitivity, specificity)
 
 
