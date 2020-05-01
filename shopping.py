@@ -59,7 +59,72 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
-    raise NotImplementedError
+    # Read data from file
+    with open(filename) as f:
+        reader = csv.reader(f)
+        next(reader)
+
+        data = []
+        for row in reader:
+            administrative = int(row[0])
+            administrative_duration = float(row[1])
+            informational = int(row[2])
+            product_related = int(row[3])
+            product_related_duration = float(row[4])
+            bounce_rates = float(row[5])
+            exit_rates = float(row[6])
+            page_values = float(row[7])
+            special_day = float(row[8])
+
+            switcher = {
+                "Jan": 0,
+                "Feb": 1,
+                "Mar": 2,
+                "Apr": 3,
+                "May": 4,
+                "Jun": 5,
+                "Jul": 6,
+                "Aug": 7,
+                "Sep": 8,
+                "Oct": 9,
+                "Nov": 10,
+                "Dec": 11,
+            }
+
+            month = switcher.get(row[9], None)
+            if month is None:
+                raise ValueError
+
+            operating_systems = int(row[10])
+            browser = int(row[11])
+            region = int(row[12])
+            traffic_type = int(row[13])
+
+            if row[14] == "New_Visitor":
+                visitor_type = 0
+            else:
+                visitor_type = 1
+
+            if row[15] == "FALSE":
+                weekend = 0
+            else:
+                weekend = 1
+
+            if row[16] == "FALSE":
+                purchased = 0
+            else:
+                purchased = 1
+
+            data.append({
+                "evidence": [administrative, administrative_duration, informational, product_related, product_related_duration, bounce_rates, exit_rates, page_values, special_day, month, operating_systems, browser, region, traffic_type, visitor_type, weekend],
+                "label": purchased
+            })
+
+    # Seperate data into evidence and labels lists
+    evidence = [row["evidence"] for row in data]
+    labels = [row["label"] for row in data]
+
+    return (evidence, labels)
 
 
 def train_model(evidence, labels):
